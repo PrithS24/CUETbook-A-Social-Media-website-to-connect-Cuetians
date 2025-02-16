@@ -1,0 +1,9 @@
+# Node.js / Python
+node_modules/
+venv/
+
+# Environment Variables
+*.env
+
+# VS Code settings
+.vscode/

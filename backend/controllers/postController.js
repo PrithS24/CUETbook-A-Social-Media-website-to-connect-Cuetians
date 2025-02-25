@@ -7,7 +7,7 @@ const createPost = async(req,res) => {
     try {
         const userId = req.user.userId;
 
-        const { content } = req.body;
+        const { content, jobPost } = req.body;
         const file = req.file;
         let mediaUrl = null;
         let mediaType = null;
@@ -26,6 +26,7 @@ const createPost = async(req,res) => {
             likeCount: 0,
             commentCount: 0,
             shareCount: 0,
+            jobPost: jobPost === true || jobPost === 'true'
         })
 
         await newPost.save();
@@ -91,6 +92,24 @@ const getAllStory = async(req, res) => {
 const getAllPosts = async(req,res) => {
     try {
         const posts = await Post.find().sort({createdAt: -1})
+        .populate('user','_id name profilePicture email')
+        .populate({
+            path: 'comments.user',
+            select: 'name, profilePicture'
+        })
+        return response(res, 201, 'Get all posts successfully', posts)
+    } catch (error) {
+        console.log('error getting posts',error)
+        return response(res,500,'Internal server error',error.message)
+    }
+}
+
+//get all job posts
+
+const getAllJobPosts = async(req,res) => {
+    try {
+        const filter = { jobPost: true};
+        const posts = await Post.find(filter).sort({createdAt: -1})
         .populate('user','_id name profilePicture email')
         .populate({
             path: 'comments.user',
@@ -211,6 +230,7 @@ const sharePost = async(req, res) => {
 module.exports= {
     createPost,
     getAllPosts,
+    getAllJobPosts,
     getPostByUserId,
     likePost,
     addCommentToPost,

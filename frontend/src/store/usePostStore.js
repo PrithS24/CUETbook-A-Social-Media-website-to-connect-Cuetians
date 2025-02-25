@@ -14,15 +14,16 @@ import { create } from "zustand";
 export const usePostStore = create((set) => ({
   posts: [],
   userPosts: [],
+  jobPosts: [],  //store jobPosts filter to the service
   story: [],
   loading: false,
   error: null,
 
   //fetchPost
-  fetchPost: async () => {
+  fetchPost: async (jobPost = null) => {
     set({ loading: true });
     try {
-      const posts = await getAllPosts();
+      const posts = await getAllPosts(jobPost);
       set({ posts, loading: false });
     } catch (error) {
       set({ error, loading: false });
@@ -54,6 +55,7 @@ export const usePostStore = create((set) => ({
   handleCreatePost: async (postData) => {
     set({ loading: true });
     try {
+      postData.jobPost = Boolean(postData.jobPost);
       const newPost = await createPost(postData);
       set((state) => ({
         posts: [newPost, ...state.posts],

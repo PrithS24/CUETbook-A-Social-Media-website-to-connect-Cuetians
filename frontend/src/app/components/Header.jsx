@@ -64,53 +64,97 @@ const Header = () => {
         }
         fetchUsers();
     }, [])
+    // useEffect(() => {
+    //     const fetchFilteredUsers = async () => {
+    //         if (!searchQuery.trim()) {
+    //             setFilterUsers([]);
+    //             setIsSearchOpen(false);
+    //             return;
+    //         }
+
+    //         try {
+    //             setLoading(true);
+    //             console.log(`🔍 Fetching users for: ${searchQuery}`);
+
+    //             const result = await getAllUsers(searchQuery); // ✅ Calls backend
+    //             console.log("✅ API Response:", result);
+
+    //             // ✅ Ensure `result` is always an array
+    //             const usersFromAPI = Array.isArray(result) ? result : [];
+
+    //             // ✅ Ensure `userList` is an array before filtering
+    //             const safeUserList = Array.isArray(userList) ? userList : [];
+
+    //             // ✅ First, filter users locally by name
+    //             let filterUser = safeUserList.filter(user =>
+    //                 user.name.toLowerCase().includes(searchQuery.toLowerCase())
+    //             );
+
+    //             // ✅ Merge local name filtering & backend search results
+    //             let combinedResults = [...new Set([...filterUser, ...usersFromAPI])];
+
+    //             setFilterUsers(combinedResults);
+    //             setIsSearchOpen(true);
+    //         } catch (error) {
+    //             console.error("Search error:", error);
+    //             toast.error("Failed to fetch users");
+    //             setFilterUsers([]);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     const delayDebounce = setTimeout(() => {
+    //         fetchFilteredUsers();
+    //     }, 300); // 🔹 Debounce API calls
+
+    //     return () => clearTimeout(delayDebounce);
+    // }, [searchQuery, userList]); // 🔹 Keep `userList` for local filtering
+
     useEffect(() => {
         const fetchFilteredUsers = async () => {
-            if (!searchQuery.trim()) {
-                setFilterUsers([]);
-                setIsSearchOpen(false);
-                return;
-            }
+          if (!searchQuery.trim()) {
+            setFilterUsers([]);
+            setIsSearchOpen(false);
+            return;
+          }
     
-            try {
-                setLoading(true);
-                console.log(`🔍 Fetching users for: ${searchQuery}`);
+          try {
+            setLoading(true);
+            const result = await getAllUsers(searchQuery);
     
-                const result = await getAllUsers(searchQuery); // ✅ Calls backend
-                console.log("✅ API Response:", result);
+            // 🔥 FIX: Ensure results are unique by using a Map
+            const usersFromAPI = Array.isArray(result) ? result : [];
+            const safeUserList = Array.isArray(userList) ? userList : [];
     
-                // ✅ Ensure `result` is always an array
-                const usersFromAPI = Array.isArray(result) ? result : [];
+            let filterUser = safeUserList.filter((user) =>
+              user.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
     
-                // ✅ Ensure `userList` is an array before filtering
-                const safeUserList = Array.isArray(userList) ? userList : [];
+            // 🔥 FIX: Prevent duplicates using Map
+            let combinedResults = [
+              ...new Map(
+                [...filterUser, ...usersFromAPI].map((user) => [user._id, user]) // 🔥 Unique key fix
+              ).values()
+            ];
     
-                // ✅ First, filter users locally by name
-                let filterUser = safeUserList.filter(user =>
-                    user.name.toLowerCase().includes(searchQuery.toLowerCase())
-                );
-    
-                // ✅ Merge local name filtering & backend search results
-                let combinedResults = [...new Set([...filterUser, ...usersFromAPI])];
-    
-                setFilterUsers(combinedResults);
-                setIsSearchOpen(true);
-            } catch (error) {
-                console.error("Search error:", error);
-                toast.error("Failed to fetch users");
-                setFilterUsers([]);
-            } finally {
-                setLoading(false);
-            }
+            setFilterUsers(combinedResults);
+            setIsSearchOpen(true);
+          } catch (error) {
+            console.error("Search error:", error);
+            toast.error("Failed to fetch users");
+            setFilterUsers([]);
+          } finally {
+            setLoading(false);
+          }
         };
     
         const delayDebounce = setTimeout(() => {
-            fetchFilteredUsers();
-        }, 300); // 🔹 Debounce API calls
+          fetchFilteredUsers();
+        }, 300); // 🔥 FIX: Debounce implemented for performance
     
-        return () => clearTimeout(delayDebounce);
-    }, [searchQuery, userList]); // 🔹 Keep `userList` for local filtering
-    
+        return () => clearTimeout(delayDebounce); // 🔥 FIX: Clear timeout properly
+      }, [searchQuery, userList]);
 
 
     // useEffect(() => {
@@ -186,7 +230,7 @@ const Header = () => {
                                     <div className='p-2'>
                                         {filterUsers.length > 0 ? (
                                             filterUsers.map((user) => (
-                                                <div className='flex items-center space-x-8 p-2 hover:bg-gray-100dark:hover:bg-gray-700 rounded-md cursor-pointer' key={user._id}
+                                                <div className='flex items-center space-x-8 p-2 hover:bg-gray-100dark:hover:bg-gray-700 rounded-md cursor-pointer'  key={`${user._id}`}
                                                     onClick={() => handleUserClick(user?._id)}>
                                                     <Search className='absolute text-sm text-gray-400' />
                                                     <div className='flex items-center gap-2'>
@@ -194,7 +238,7 @@ const Header = () => {
                                                             {user?.profilePicture ? (
                                                                 <AvatarImage src={user?.profilePicture} alt={user?.name} />
                                                             ) : (
-                                                                <AvatarFallback className='dark:bg-gray-400'>{userPlaceholder}</AvatarFallback>
+                                                                <AvatarFallback className='dark:bg-gray-400'>{user?.name[0]}</AvatarFallback>
                                                             )}
 
                                                         </Avatar>

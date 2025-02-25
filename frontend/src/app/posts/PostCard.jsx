@@ -17,6 +17,10 @@ import PostComments from "./PostComments";
 import { formateDate } from "@/lib/utils";
 import { formatDate } from "date-fns";
 
+const handleUserProfile=()=>{
+  Router.push(`user-profile/${post?.user?._id}`)
+}
+
 const PostCard = ({ post, isLiked, onShare, onComment, onLike }) => {
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [showComments, setShowComments] = useState(false);
@@ -36,6 +40,12 @@ const PostCard = ({ post, isLiked, onShare, onComment, onLike }) => {
   const generateSharedLink = () => {
     return `http://localhost:3000/${post?.id}`;
   };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // Toggle the dropdown menu
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
+
   const handleShare = (platform) => {
     const url = generateSharedLink();
     let shareUrl;
@@ -67,12 +77,17 @@ const PostCard = ({ post, isLiked, onShare, onComment, onLike }) => {
       transition={{ duration: 0.5 }}
     >
       <Card>
-        <CardContent className="p-6  dark:text-white">
+        <CardContent  
+          className={`p-6 dark:text-white ${
+            post?.jobPost ? "bg-green-200 rounded-lg" : ""
+          }`}  >
+
           <div className="flex items-center justify-between mb-4">
             <div
-              className="flex items-center space-x-3 cursor-pointer"
+              className="flex items-center space-x-3 
+              cursor-pointer" onClick={handleUserProfile}>
 
-            >
+            
               <Avatar>
                 {post?.user?.profilePicture ? (
                                  <AvatarImage
@@ -87,19 +102,40 @@ const PostCard = ({ post, isLiked, onShare, onComment, onLike }) => {
   
               </Avatar>
               <div>
-                <p className="font-semibold dark:text-white">
+              <p className="font-semibold dark:text-white">
                   {post?.user?.name}
+                </p>
+                <p className={`font-semibold dark:text-white ${
+                    post?.jobPost ? "dark:text-gray-700" : ""
+                  }`}>
                 </p>
                 <p className="font-sm text-gray-500">
                   {formateDate(post?.createdAt)}
                 </p>
               </div>
             </div>
-            <Button variant="ghost" className="dark:hover:bg-gray-500">
+            <Button variant="ghost" className="dark:hover:bg-gray-500"
+            onClick={toggleMenu}
+            >
               <MoreHorizontal className="dark:text-white h-4 w-4" />
             </Button>
+            {isMenuOpen && (
+              <div className="absolute right-60 mt-2 bg-white text-black dark:bg-white dark:text-black rounded-lg shadow-lg w-40 p-2 z-10">
+                <Button className="w-full text-left px-4 py-2 text-sm dark:text-black hover:bg-gray-200 dark:hover:bg-gray-700">
+                  Save Post
+                </Button>
+                <Button className="w-full text-left px-4 py-2 text-sm dark:text-black hover:bg-gray-200 dark:hover:bg-gray-700">
+                  Hide Post
+                </Button>
+                <Button className="w-full text-left px-4 py-2 text-sm dark:text-black hover:bg-gray-200 dark:hover:bg-gray-700">
+                  Report
+                </Button>
+              </div>
+            )}
           </div>
-          <p className="mb-4">{post?.content}</p>
+          <p className={`mb-4 ${
+              post?.jobPost ? "text-blue-500 font-semibold" : ""
+            }`}>{post?.content}</p>
           {post?.mediaUrl && post.mediaType === "image" && (
             <img
               src={post?.mediaUrl}
@@ -133,14 +169,19 @@ const PostCard = ({ post, isLiked, onShare, onComment, onLike }) => {
           <div className="flex justify-between mb-2">
             <Button
               variant="ghost"
-              className={`flex-1 dark:hover:bg-gray-600 ${isLiked ? "text-green-600" :""}`}
+              className={`flex-1 dark:hover:bg-gray-600 ${isLiked ? "text-green-600" :""} ${
+                post?.jobPost ? "dark:text-gray-800 dark:hover:bg-white" : ""
+              }`}
               onClick={onLike}
             >
               <ThumbsUp className="mr-2 h-4 w-4" /> Like
             </Button>
             <Button
               variant="ghost"
-              className={`flex-1 dark:hover:bg-gray-600 `}
+              className={`flex-1 dark:hover:bg-gray-600
+                 ${
+                post?.jobPost ? "dark:text-gray-800 dark:hover:bg-white" : ""
+              } `}
               onClick={handleCommentClick}
             >
               <MessageCircle className="mr-2 h-4 w-4" /> Comment
@@ -150,14 +191,15 @@ const PostCard = ({ post, isLiked, onShare, onComment, onLike }) => {
               onOpenChange={setIsShareDialogOpen}
             >
               <DialogTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="flex-1 dark:hover:bg-gray-500"
-                onClick={onShare}
+              <div
+                  className={`flex-1 flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium cursor-pointer transition 
+      dark:hover:bg-gray-700 dark:text-white
+      ${post?.jobPost ? "dark:text-gray-800 dark:hover:bg-white" : ""}
+    `}
                 >
-                  <Share2 className="mr-2 h-4 w-4" />
-                  share
-                </Button>
+                  <Share2 className="h-4 w-4" />
+                  Share
+                </div>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>

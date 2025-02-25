@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ImageIcon, Laugh, Plus, Video, X } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { AnimatePresence } from "framer-motion";
@@ -34,6 +35,8 @@ const NewPostForm = ({ isPostFormOpen, setIsPostFormOpen }) => {
   const [showImageUpload, setShowImageUpload] = useState(false);
 
   const fileInputRef= useRef(null)
+
+  const [isJobPost, setIsJobPost] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -60,6 +63,7 @@ const NewPostForm = ({ isPostFormOpen, setIsPostFormOpen }) => {
       setLoading(true);
       const formData = new FormData();
       formData.append("content", postContent);
+      formData.append("jobPost", isJobPost);
       if (selectedFile) {
         formData.append("media", selectedFile);
       }
@@ -68,11 +72,17 @@ const NewPostForm = ({ isPostFormOpen, setIsPostFormOpen }) => {
       setPostContent("");
       setSelectedFile(null);
       setFilePreview(null);
+      setIsJobPost(false);
       setIsPostFormOpen(false);
     } catch (error) {
       console.error(error);
       setLoading(false);
     }
+  };
+  const handleCheckboxChange = (checked) => {
+    //console.log(isJobPost)
+    setIsJobPost(checked); // Properly update checkbox state
+    //console.log(isJobPost)
   };
   return (
     <Card>
@@ -194,6 +204,23 @@ const NewPostForm = ({ isPostFormOpen, setIsPostFormOpen }) => {
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {/**job post */}
+              <div className="flex justify-between items-center mt-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="terms1"
+                    checked={isJobPost}
+                    onCheckedChange={handleCheckboxChange}
+                  />
+                  <label
+                    htmlFor="terms1"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Post as Job Post
+                  </label>
+                </div>
+              </div>
 
               <div className="bg-gray-200 dark:bg-muted p-4 rounded-lg mt-4 ">
                 <p className="font-semibold mb-2">Add Your Post</p>

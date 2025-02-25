@@ -24,9 +24,10 @@ export const createStory = async(postData) =>{
 }
 
 //get all post method 
-export const getAllPosts = async() =>{
+export const getAllPosts = async(jobPost = null) =>{
     try {
-         const result = await  axiosInstance.get('/users/posts')
+        const params = jobPost !== null ? { jobPost } : {};
+         const result = await  axiosInstance.get('/users/posts', { params });
          return result?.data?.data;
     } catch (error) {
         console.error(error)

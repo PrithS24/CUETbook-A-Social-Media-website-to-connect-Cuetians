@@ -17,6 +17,7 @@ const postSchema = new mongoose.Schema({
     CommentCount: {type: Number, default: 0},
     share: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     shareCount: {type: Number, default: 0},
+    jobPost: {type: Boolean, default: false}
 },{timestamps:true})
 
 const Post = mongoose.model('Post', postSchema)

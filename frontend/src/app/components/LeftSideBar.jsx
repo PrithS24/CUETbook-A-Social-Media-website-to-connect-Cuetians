@@ -57,17 +57,17 @@ const LeftSideBar = () => {
                     <Button
                     variant = "ghost"
                     className="w-full justify-start"
-                    onClick = {() => handleNavigation('/user-profile')}
+                    onClick = {() => handleNavigation(`/user-profile/${user?._id}`)}
                     >
                         <User className='mr-4'/> Profile
                     </Button>
-                    {/* <Button
+                    <Button
                         variant="ghost"
                         className="w-full justify-start"
                         onClick={() => handleNavigation("job-posts")}
                     >
                         <Briefcase className="mr-4" /> Job Posts
-                    </Button> */}
+                    </Button>
                 </nav>
                 
                 {/* footer section  */}

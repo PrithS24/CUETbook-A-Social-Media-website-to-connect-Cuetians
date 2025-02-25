@@ -8,7 +8,7 @@ router.post('/posts', authMiddleware, multerMiddleware.single('media'), createPo
 //get all posts
 router.get('/posts',authMiddleware, getAllPosts)
 //get all job posts
-router.get('/posts',authMiddleware, getAllJobPosts)
+// router.get('/posts',authMiddleware, getAllJobPosts)
 //get posts by userId
 router.get('/posts/user/:userId',authMiddleware, getPostByUserId)
 //user like post route

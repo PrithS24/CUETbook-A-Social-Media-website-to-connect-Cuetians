@@ -15,14 +15,19 @@ const PostComments = ({ post, onComment, commentInputRef }) => {
     ? post?.comments
     : post?.comments?.slice(0, 2);
 
-  const handleCommentSubmit = async () => {
-    if (commentText.trim()) {
-      onComment({ text: commentText });
-      setCommentText("");
-    }
-  };
+    const handleCommentSubmit = async () => {
+      if (commentText.trim()) {
+        onComment({ text: commentText });
+    
+        // ✅ Manually update comment count
+        post.CommentCount = (post.CommentCount || 0) + 1;
+    
+        setCommentText("");
+      }
+    };
+    
 
-  const userPlaceholder = user?.username
+  const userPlaceholder = user?.name
     ?.split(" ")
     .map((name) => name[0])
     .join("");
@@ -37,11 +42,11 @@ const PostComments = ({ post, onComment, commentInputRef }) => {
               {comment?.user?.profilePicture ? (
                 <AvatarImage
                   src={comment?.user?.profilePicture}
-                  alt={comment?.user?.username}
+                  alt={comment?.user?.name}
                 />
               ) : (
                 <AvatarFallback className="dark:bg-gray-400">
-                  {comment?.user?.username
+                  {comment?.user?.name
                     ?.split(" ")
                     .map((name) => name[0])
                     .join(" ")}
@@ -50,7 +55,7 @@ const PostComments = ({ post, onComment, commentInputRef }) => {
             </Avatar>
             <div className="flex flex-col">
               <div className="rounded-lg p-2">
-                <p className="font-bold text-sm">{comment?.user?.username}</p>
+                <p className="font-bold text-sm">{comment?.user?.name}</p>
                 <p className="text-sm">{comment?.text}</p>
               </div>
               <div className="flex items-center mt-1 text-xs text-gray-400">
@@ -85,7 +90,7 @@ const PostComments = ({ post, onComment, commentInputRef }) => {
       <div className="flex items-center space-x-2 mt-4">
         <Avatar className="w-8 h-8">
           {user?.profilePicture ? (
-            <AvatarImage src={user?.profilePicture} alt={user?.username} />
+            <AvatarImage src={user?.profilePicture} alt={user?.name} />
           ) : (
             <AvatarFallback className="dark:bg-gray-400">{userPlaceholder}</AvatarFallback>
           )}

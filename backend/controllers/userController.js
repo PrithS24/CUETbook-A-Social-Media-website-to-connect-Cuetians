@@ -263,7 +263,7 @@ const getAllUser = async (req, res) => {
                     orConditions.push({ department: { $regex: new RegExp(term, "i") } });
                     orConditions.push({ userType: { $regex: new RegExp(term, "i") } });
 
-                    if (["cse", "eee", "bba"].includes(term)) {
+                    if (["cse", "eee", "mecha"].includes(term)) {
                         andConditions.push({ department: { $regex: new RegExp(term, "i") } });
                     }
                     if (["student", "alumni", "faculty"].includes(term)) {

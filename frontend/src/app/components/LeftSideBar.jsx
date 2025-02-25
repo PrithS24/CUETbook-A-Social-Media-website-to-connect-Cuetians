@@ -30,7 +30,7 @@ const LeftSideBar = () => {
                                 <AvatarFallback className='dark:bg-gray-400 dark:text-foreground'>{userPlaceholder}</AvatarFallback>
                             )} 
                         </Avatar>
-                        <span className='font-semibold'>{user.name}</span>
+                        <span className='font-semibold'>{user?.name}</span>
                     </div>
                     
                     <Button

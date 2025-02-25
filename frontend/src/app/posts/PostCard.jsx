@@ -16,10 +16,15 @@ import {
 import PostComments from "./PostComments";
 import { formateDate } from "@/lib/utils";
 import { formatDate } from "date-fns";
+import { useRouter } from 'next/router';
 
-const handleUserProfile=()=>{
-  Router.push(`user-profile/${post?.user?._id}`)
-}
+
+// const router = useRouter();  // ✅ Add this at the top inside the component
+
+const handleUserProfile = () => {
+  router.push(`/user-profile/${post?.user?._id}`);
+};
+
 
 const PostCard = ({ post, isLiked, onShare, onComment, onLike }) => {
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
@@ -156,9 +161,13 @@ const PostCard = ({ post, isLiked, onShare, onComment, onLike }) => {
             <div className="flex gap-3">
               <span
                 className="text-sm text-gray-500 dark:text-gray-400 hover:border-b-2 border-gray-400 cursor-pointer "
-              onClick={() => setShowComments(!showComments)}
+              onClick={() => {
+  setShowComments(!showComments);
+  // post.CommentCount = (post.CommentCount || 0) + 1;
+}}
+
               >
-                    {post?.commentCount} comments
+                    {post?.CommentCount} comments
               </span>
               <span className="text-sm text-gray-500 dark:text-gray-400 hover:border-b-2 border-gray-400 cursor-pointer ">
               {post?.shareCount} share

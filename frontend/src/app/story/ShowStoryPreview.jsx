@@ -14,9 +14,10 @@ const ShowStoryPreview = ({
   avatar,
   isLoading,
 }) => {
-    const userPlaceholder = user?.name
-    ? user.name.split(" ").map((name) => name[0]).join("")
-    : "U";
+  const userPlaceholder = name
+  ? name.split(" ").map((n) => n[0]).join("")
+  : "U";
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
      <div className="relative w-full max-w-md h-[70vh] flex flex-col  bg-white dark:bg-gray-800 rounded-lg overflow-hidden">

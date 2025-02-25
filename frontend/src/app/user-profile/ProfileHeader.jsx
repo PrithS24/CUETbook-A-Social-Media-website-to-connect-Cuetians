@@ -87,7 +87,7 @@ const ProfileHeader = ({
       setLaoding(true);
       const formData = new FormData();
       if (coverPhotoFile) {
-        formData.append("coverPhoto", coverPhotoFile);
+        formData.append("coverPicture", coverPhotoFile);
       }
       const updateProfile = await updateUserCoverPhoto(id, formData);
       setProfileData({ ...profileData, coverPhoto:updateProfile.coverPhoto });
@@ -114,7 +114,7 @@ const ProfileHeader = ({
     <div className="relative">
       <div className="relative h-64 md:h-80 bg-gray-300 overflow-hidden ">
         <img
-          src={profileData?.coverPhoto}
+          src={profileData?.coverPicture}
           alt="cover"
           className="w-full h-full object-cover"
         />

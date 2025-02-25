@@ -49,18 +49,18 @@ const MutualFriends = ({ id, isOwner }) => {
                     {friend?.profilePicture ? (
                       <AvatarImage
                         src={friend?.profilePicture}
-                        alt={friend?.username}
+                        alt={friend?.name}
                       />
                     ) : (
                       <AvatarFallback className="dark:bg-gray-400">
                         {userPlaceholder}
-                        {userPlaceholder}
+                       
                       </AvatarFallback>
                     )}
                   </Avatar>
                   <div>
                     <p className="font-semibold dark:text-gray-100">
-                      {friend?.username}
+                      {friend?.name}
                     </p>
                     <p className="text-sm text-gray-400">
                       {friend?.followerCount} folllowers

@@ -109,7 +109,7 @@ export const updateUserProfile = async(userId,updateData) =>{
 
 export const updateUserCoverPhoto = async(userId,updateData) =>{
     try {
-         const response = await axiosInstance.put(`/users/profile/cover-photo/${userId}`,updateData)
+         const response = await axiosInstance.put(`/users/profile/cover-picture/${userId}`,updateData)
          return response?.data?.data;
     } catch (error) {
         console.log(error);

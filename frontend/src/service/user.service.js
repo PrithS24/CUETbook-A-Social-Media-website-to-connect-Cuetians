@@ -19,6 +19,16 @@ export const getAllFriendsSuggestion = async() =>{
         throw error;   
     }
 }
+export const sendFriendRequest = async (userId) => {
+    try {
+        const response = await axiosInstance.post('/users/follow', { userIdToFollow: userId }); // ✅ Reusing followUser logic
+        return response?.data;
+    } catch (error) {
+        console.error("❌ Error sending friend request:", error);
+        throw error;
+    }
+};
+
 // ✅ New function to fetch accepted friends
 export const getAcceptedFriends = async () => {
     try {

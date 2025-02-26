@@ -64,7 +64,7 @@ const LeftSideBar = () => {
                     <Button
                         variant="ghost"
                         className="w-full justify-start"
-                        onClick={() => handleNavigation("job-posts")}
+                        onClick={() => handleNavigation("/job-post")}
                     >
                         <Briefcase className="mr-4" /> Job Posts
                     </Button>

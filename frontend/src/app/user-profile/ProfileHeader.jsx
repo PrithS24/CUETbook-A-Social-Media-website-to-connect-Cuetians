@@ -5,6 +5,8 @@ import { AnimatePresence } from "framer-motion";
 import { Camera, PenLine, Save, Upload, X } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { sendFriendRequest } from "@/service/user.service"; // ✅ Import function
+
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { updateUserCoverPhoto, updateUserProfile } from "@/service/user.service";
 import userStore from "@/store/userStore";
+import { UserPlus } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 const ProfileHeader = ({
@@ -33,6 +36,7 @@ const ProfileHeader = ({
   const [coverPhotoFile, setCoverPhotoFile] = useState(null);
   const [loading, setLaoding] = useState(false);
   const { setUser } = userStore();
+  const [friendRequestSent, setFriendRequestSent] = useState(false);
 
    const {register,handleSubmit,setValue} = useForm({
     defaultValues:{
@@ -50,7 +54,7 @@ const ProfileHeader = ({
     try {
       setLaoding(true);
       const formData = new FormData();
-      formData.append("username", data.name);
+      formData.append("name", data.name);
       formData.append("dateOfBirth", data.dateOfBirth);
       formData.append("gender", data.gender);
 
@@ -110,6 +114,14 @@ const ProfileHeader = ({
     }
   };
 
+  const handleAddFriend = async () => {
+    try {
+      await sendFriendRequest(profileData._id); // ✅ Uses updated function
+      setFriendRequestSent(true);
+    } catch (error) {
+      console.error("❌ Error sending friend request:", error);
+    }
+  };
   return (
     <div className="relative">
       <div className="relative h-64 md:h-80 bg-gray-300 overflow-hidden ">
@@ -170,6 +182,22 @@ const ProfileHeader = ({
     </>
   )}
           </div>
+          {!isOwner && !friendRequestSent && (
+            <Button
+              className="mt-4 md:mt-0 bg-green-600 hover:bg-green-500"
+              onClick={handleAddFriend} // ✅ Call function when clicked
+            >
+              <UserPlus className="w-4 h-4 mr-2" />
+              Add Friend
+            </Button>
+          )}
+
+          {/* ✅ Show "Friend Request Sent" state after clicking */}
+          {friendRequestSent && (
+            <Button className="mt-4 md:mt-0 bg-gray-500 cursor-not-allowed" disabled>
+              Friend Request Sent
+            </Button>
+          )}
           {isOwner && (
             <Button
               className="mt-4 md:mt-0 cursor-pointer"

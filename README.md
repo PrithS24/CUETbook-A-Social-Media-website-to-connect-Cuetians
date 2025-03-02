@@ -25,7 +25,7 @@ CUETbook is a social platform built using the MERN (MongoDB, Express.js, React.j
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/PrithS24/CUETbook-A-Social-Media-website-to-connect-CUETians.git
+   git clone [https://github.com/PrithS24/CUETbook-A-Social-Media-website-to-connect-CUETians.git](https://github.com/PrithS24/CUETbook-A-Social-Media-website-to-connect-Cuetians.git)
    cd CUETbook
 2. Install dependencies:
    ```sh
